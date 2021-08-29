@@ -101,7 +101,7 @@ def arubaito():
             print("未知错误！")
 
 login()
-
+driver.quit()
 # class autoOperation:
 #     def getNsInput(self):
 #         inputTemp = input("请输入你想自动填入的字段的名称：")
