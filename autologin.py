@@ -9,7 +9,7 @@ from selenium import webdriver
 
 driver = webdriver.Edge(executable_path="E:\\Live\\Auto Login\\msedgedriver.exe")
 
-
+# 获取Cookies
 def getCookies(relogin):
     url = "https://www.tsdm39.net/forum.php"
     driver.get("https://www.tsdm39.net/member.php?mod=logging&action=login")
@@ -26,7 +26,7 @@ def getCookies(relogin):
     if relogin:
         login()
 
-
+# 登录操作
 def login():
     global Cookies
     try:
@@ -47,12 +47,15 @@ def login():
                     cookie[k] = int(t)  # 时间戳s
         # 将每一次遍历的cookie中的这五个键名和键值添加到cookie
         driver.add_cookie({k: cookie[k] for k in {'name', 'value', 'domain', 'path', 'expiry'}})
+    # 签到再说
     sign()
+    arubaito()
     # driver.get("https://www.tsdm39.net/forum.php")
     # 实际上，cookies可能过期。这里可能需要加上登陆状态检测
 
 
 def sign():
+    time.sleep(random.random() + 1)
     driver.get("https://www.tsdm39.net/plugin.php?id=dsu_paulsign:sign")
     # 下面调用一言api
     url = "https://v1.hitokoto.cn/?c=k&min_length=3&max_length=12&encode=text&charset=utf-8"
@@ -61,6 +64,10 @@ def sign():
     # 程序本体
     try:
         driver.find_element_by_id("kx").click()
+        time.sleep(random.random()+1)
+        driver.find_element_by_name("todaysay").send_keys(hitokoto)
+        time.sleep(random.random() + 1)
+        driver.find_element_by_xpath("/html/body/div[6]/div[2]/div/div[1]/div[1]/form/table[1]/tbody/tr/td/div/a[1]/img").click()
     except:
         try:
             print("已经累计签到",driver.find_element_by_xpath("/html/body/div[6]/div[2]/div/div[1]/p[1]/b").text,"天")
@@ -69,30 +76,30 @@ def sign():
             print("当前等级", driver.find_element_by_xpath("/html/body/div[6]/div[2]/div/div[1]/p[5]/font[1]/b").text)
         except:
             print("未知错误！")
-            exit(1)
-    driver.find_element_by_name("todaysay").send_keys(hitokoto)
-    driver.find_element_by_xpath(
-        "/html/body/div[6]/div[2]/div/div[1]/div[1]/form/table[1]/tbody/tr/td/div/a[1]/img").click()
-
 
 def arubaito():
+    time.sleep(random.random() + 1)
     driver.get("https://www.tsdm39.net/plugin.php?id=np_cliworkdz:work")
     try:
         driver.find_element_by_id("np_advid1").click()
-    except:
-        print(driver.find_element_by_class_name("alert_info").text)
-    try:
+        time.sleep(random.random() + 1)
         driver.find_element_by_id("np_advid2").click()
+        time.sleep(random.random() + 2)
         driver.find_element_by_id("np_advid3").click()
+        time.sleep(random.random() + 1)
         driver.find_element_by_id("np_advid4").click()
+        time.sleep(random.random() + 3)
         driver.find_element_by_id("np_advid5").click()
+        time.sleep(random.random() + 1)
         driver.find_element_by_id("np_advid6").click()
+        time.sleep(random.random() + 2)
         driver.find_element_by_id("workstart").click()
     except:
-        print("未知错误！")
+        try:
+            print(driver.find_element_by_class_name("alert_info").text)
+        except:
+            print("未知错误！")
 
-
-# getCookies()
 login()
 
 # class autoOperation:
