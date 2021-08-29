@@ -2,12 +2,14 @@
 # Copyright @WENJUNXIN
 # coding:utf-8
 import pickle
+import random
 import time
 from urllib.request import Request, urlopen
 
 from selenium import webdriver
 
 driver = webdriver.Edge(executable_path="E:\\Live\\Auto Login\\msedgedriver.exe")
+
 
 # 获取Cookies
 def getCookies(relogin):
@@ -25,6 +27,7 @@ def getCookies(relogin):
         driver.close()
     if relogin:
         login()
+
 
 # 登录操作
 def login():
@@ -64,18 +67,20 @@ def sign():
     # 程序本体
     try:
         driver.find_element_by_id("kx").click()
-        time.sleep(random.random()+1)
+        time.sleep(random.random() + 1)
         driver.find_element_by_name("todaysay").send_keys(hitokoto)
         time.sleep(random.random() + 1)
-        driver.find_element_by_xpath("/html/body/div[6]/div[2]/div/div[1]/div[1]/form/table[1]/tbody/tr/td/div/a[1]/img").click()
+        driver.find_element_by_xpath(
+            "/html/body/div[6]/div[2]/div/div[1]/div[1]/form/table[1]/tbody/tr/td/div/a[1]/img").click()
     except:
         try:
-            print("已经累计签到",driver.find_element_by_xpath("/html/body/div[6]/div[2]/div/div[1]/p[1]/b").text,"天")
+            print("已经累计签到", driver.find_element_by_xpath("/html/body/div[6]/div[2]/div/div[1]/p[1]/b").text, "天")
             print("本月已经累计签到", driver.find_element_by_xpath("/html/body/div[6]/div[2]/div/div[1]/p[2]/b").text, "天")
             print("上次签到是", driver.find_element_by_xpath("/html/body/div[6]/div[2]/div/div[1]/p[3]/font").text)
             print("当前等级", driver.find_element_by_xpath("/html/body/div[6]/div[2]/div/div[1]/p[5]/font[1]/b").text)
         except:
             print("未知错误！")
+
 
 def arubaito():
     time.sleep(random.random() + 1)
@@ -99,6 +104,7 @@ def arubaito():
             print(driver.find_element_by_class_name("alert_info").text)
         except:
             print("未知错误！")
+
 
 login()
 driver.quit()
