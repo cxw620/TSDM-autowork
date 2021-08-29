@@ -1,7 +1,9 @@
 # 2021-07-05 学习浏览器程序化控制练手之作
 # Copyright @WENJUNXIN
+# coding:utf-8
 import pickle
 import time
+from urllib.request import Request, urlopen
 
 from selenium import webdriver
 
@@ -45,15 +47,49 @@ def login():
                     cookie[k] = int(t)  # 时间戳s
         # 将每一次遍历的cookie中的这五个键名和键值添加到cookie
         driver.add_cookie({k: cookie[k] for k in {'name', 'value', 'domain', 'path', 'expiry'}})
-    driver.get("https://www.tsdm39.net/forum.php")
+    sign()
+    # driver.get("https://www.tsdm39.net/forum.php")
     # 实际上，cookies可能过期。这里可能需要加上登陆状态检测
-
-def arubaito():
-    driver.get("https://www.tsdm39.net/plugin.php?id=np_cliworkdz:work")
 
 
 def sign():
     driver.get("https://www.tsdm39.net/plugin.php?id=dsu_paulsign:sign")
+    # 下面调用一言api
+    url = "https://v1.hitokoto.cn/?c=k&min_length=3&max_length=12&encode=text&charset=utf-8"
+    firefox_headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 6.1; WOW64; rv:23.0) Gecko/20100101 Firefox/23.0'}
+    hitokoto = urlopen(Request(url, headers=firefox_headers)).read().decode()
+    # 程序本体
+    try:
+        driver.find_element_by_id("kx").click()
+    except:
+        try:
+            print("已经累计签到",driver.find_element_by_xpath("/html/body/div[6]/div[2]/div/div[1]/p[1]/b").text,"天")
+            print("本月已经累计签到", driver.find_element_by_xpath("/html/body/div[6]/div[2]/div/div[1]/p[2]/b").text, "天")
+            print("上次签到是", driver.find_element_by_xpath("/html/body/div[6]/div[2]/div/div[1]/p[3]/font").text)
+            print("当前等级", driver.find_element_by_xpath("/html/body/div[6]/div[2]/div/div[1]/p[5]/font[1]/b").text)
+        except:
+            print("未知错误！")
+            exit(1)
+    driver.find_element_by_name("todaysay").send_keys(hitokoto)
+    driver.find_element_by_xpath(
+        "/html/body/div[6]/div[2]/div/div[1]/div[1]/form/table[1]/tbody/tr/td/div/a[1]/img").click()
+
+
+def arubaito():
+    driver.get("https://www.tsdm39.net/plugin.php?id=np_cliworkdz:work")
+    try:
+        driver.find_element_by_id("np_advid1").click()
+    except:
+        print(driver.find_element_by_class_name("alert_info").text)
+    try:
+        driver.find_element_by_id("np_advid2").click()
+        driver.find_element_by_id("np_advid3").click()
+        driver.find_element_by_id("np_advid4").click()
+        driver.find_element_by_id("np_advid5").click()
+        driver.find_element_by_id("np_advid6").click()
+        driver.find_element_by_id("workstart").click()
+    except:
+        print("未知错误！")
 
 
 # getCookies()
